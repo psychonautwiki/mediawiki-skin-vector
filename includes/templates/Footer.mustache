@@ -17,6 +17,12 @@
 {{! `role` is unnecessary but kept to support selectors in any gadgets or user styles and
 	to mitigate a VoiceOver bug. }}
 <footer id="footer" class="mw-footer" role="contentinfo" {{{html-userlangattributes}}}>
+	<ul id="footer-random-quotes" style="clear:left;">
+		<li id="footer-random-quote">
+			<b>{{data-quote}}</b>
+		</li>
+	</ul>
+
 	{{#array-footer-rows}}
 	<ul id="{{id}}" {{#className}}class="{{.}}"{{/className}}>
 		{{#array-items}}

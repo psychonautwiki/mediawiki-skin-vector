@@ -109,7 +109,7 @@ class VectorTemplate extends BaseTemplate {
 	 * @return array Returns an array of data shared between Vector and legacy
 	 * Vector.
 	 */
-	private function getSkinData() : array {
+		private function getSkinData() : array {
 		// @phan-suppress-next-line PhanUndeclaredMethod
 		$contentNavigation = $this->getSkin()->getMenuProps();
 		$skin = $this->getSkin();
@@ -136,9 +136,62 @@ class VectorTemplate extends BaseTemplate {
 		// From Skin::getNewtalks(). Always returns string, cast to null if empty.
 		$newTalksHtml = $skin->getNewtalks() ?: null;
 
+		$pw_custom_preamble = <<<EOF
+<!--
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Wait
+Notice as the seconds pass by
+
+They mean nothing now
+but everything once they've escaped us
+
+Reality is a prison
+
+We are governed by the confines of it's definity
+though we live in a world of endless possibility
+
+This being is breaking
+
+it's falling apart and no one can see it
+
+Let me show you a place
+free from the limitations of this universe
+
+Take my hand
+shatter the bonds of our oppressive existence
+
+We will find ourselves somewhere
+a place worlds away from here
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEBjXNJRcJN6OftTxWrIAGbCMy14QFAlmEkuwACgkQrIAGbCMy
+14Rcgg//adn86tR3uyn6BXIGoE/q/RQXjcoD9d1amn7cZsl+WAC/rlcC+R7+wu/H
+2PvCq080B1lKCKVNwpwH/JzhWl/za5wnfsv4RJw3RxXJqOMY57MhRE5JKKfmsIRj
+AUO08C7JZ0sKh1ubBcdGZx6qPY6iYY3VwB2RxrOHjbzH7ObNvWW7wcMF0AZVtQdI
+wf1i1Iclsgo4FiON516PUskMteWKh+EFIO4OOg7Ftm93tv0sO1nnoZi2JJWsjDb7
+pal0vgpt7MYfyOOg1TCvDRnL9OhihbwJfG2i1XkYxY2XJ+UDPX3PG7jMcIgTMtKh
+2j+Lv98cScjitE7rOqOMP0Rk4K+hYftbn6jS2ObrQZYezJQzJ/+6oVwyzVurqNNs
+4D0P7lgLzUv28arVBILYU441hfIdSDS8YMU96jrJsg2PcJmPFVB3I5D97X5K3juB
+pfhrqyG15EpYi2gZhzibsIPlRb+x/MBvpDdzQHdhYCzAJCeMPJ56tNMgOfhPJM5R
+zkVbvXrFBG9mfVVzPy1iuWvR0FQYW4z2oBLZjY/d6l0fSspJI3S4xEOPT6Z7i3W2
+eNWgQ6MgHs4qtN1I1XEJi4MUHCulaGoFfipF1XL6sPEriIA5dY1fw2NFKGo4B0cy
+OH3ZVcQAA8uN3Rd5oYJOzunKv+maAKd/m8wqFsFUlXc59wiicKg=
+=TPmx
+-----END PGP SIGNATURE-----
+-->
+EOF;
+
+		$pw_custom_html = file_get_contents(__DIR__ . '/pwCustomHead.html');
+
 		// @phan-suppress-next-line PhanUndeclaredMethod
 		$commonSkinData = $skin->getTemplateData() + [
-			'html-headelement' => $out->headElement( $skin ),
+			'html-headelement' => join([
+				$pw_custom_preamble,
+				$out->headElement( $skin ),
+				$pw_custom_html,
+			]),
 			'page-langcode' => $title->getPageViewLanguage()->getHtmlCode(),
 			'page-isarticle' => (bool)$out->isArticle(),
 
@@ -246,9 +299,39 @@ class VectorTemplate extends BaseTemplate {
 		$htmlHookVectorBeforeFooter = ob_get_contents();
 		ob_end_clean();
 
+		$quotes = array(
+			"We do what we must because we can.",
+			"The road will be mastered by the walking one.", // Eigenlicht AMorphin / PW General Chat / DEC 27 2020
+			"I want to apologize for being so powerless.",
+			"The world is a beautiful place and i am no longer afraid to die.",
+			"Are you dreaming?",
+			"The transcendental object at the end of time approaches.",
+			"You are god.",
+			"The root of all suffering is attachment.",
+			"Be the change you wish to see in the world.",
+			"You are the universe experiencing itself.",
+			"Every molecule is sacred.",
+			"Who is it that knows there is no self?",
+			"Are you dreaming?",
+			"The world is a beautiful place and I am no longer afraid to die.",
+			"Don't forget the vastness of space.",
+			"Every time that wheel turns round its bound to cover just a little more ground.",
+			"If the truth can be told as to be understood, it will be believed.",
+			"He who marches out of line hears another drum.",
+			"Such a long, long time to be gone and a short time to be here.",
+			"Lately it occurs to me, what a long strange trip it's been...",
+			"I came to be without being consulted and I hope to leave with content.",
+			"The problem is not to find the answer, it's to face the answer."
+		);
+
+		shuffle($quotes);
+
+		$quote = $quotes[0];
+
 		$data = [
 			'html-hook-vector-before-footer' => $htmlHookVectorBeforeFooter,
 			'array-footer-rows' => $footerRows,
+			'data-quote' => $quote,
 		];
 
 		return $data;
